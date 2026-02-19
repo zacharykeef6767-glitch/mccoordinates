@@ -3,6 +3,8 @@
 
 A mobile-first Progressive Web App (PWA) for tracking Minecraft coordinates, organized by world or server. Install it to your phone's home screen and it works completely offline.
 
+### 🚀 [**LAUNCH THE APP**](https://zacharykeef6767-glitch.github.io/mccoordinates/)
+
 ---
 
 ## Features
@@ -51,3 +53,9 @@ All your coordinates are saved locally on your device using `localStorage` — n
 | 🌀 | Portal |
 | 💎 | Resource |
 | 📍 | Other |
+
+---
+
+## Feedback & Support
+
+Have a bug report or feature request? 💬 Click the feedback button in the app or [open an issue on GitHub](https://github.com/zacharykeef6767-glitch/mccoordinates/issues).
