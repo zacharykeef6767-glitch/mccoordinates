@@ -21,11 +21,11 @@
   --gold: #ffd700; --nether: #c44a00; --end: #9b59b6; --red: #e03c3c;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; }
+html, body { height: 100%; width: 100%; }
 body {
   font-family: 'Press Start 2P', monospace;
   background: var(--dark); color: var(--text);
-  display: flex; flex-direction: column; overflow: hidden;
+  display: flex; flex-direction: column; overflow: hidden; width: 100%;
 }
 .hidden { display: none !important; }
 
@@ -62,13 +62,13 @@ body {
 .app-header {
   background: var(--panel); border-bottom: 2px solid var(--border);
   padding: 0 16px; display: flex; align-items: center; gap: 12px;
-  height: 56px; flex-shrink: 0;
+  height: 56px; flex-shrink: 0; width: 100%; overflow: visible;
 }
 .header-logo  { font-size: 20px; }
 .header-title { font-size: 9px; color: var(--grass); text-shadow: 1px 1px 0 #000; flex: 1; }
 .icon-btn {
   background: var(--panel2); border: 2px solid var(--border);
-  color: var(--text); width: 40px; height: 40px;
+  color: var(--text); width: 40px; height: 40px; min-width: 40px; min-height: 40px;
   display: flex; align-items: center; justify-content: center;
   font-size: 17px; cursor: pointer; border-radius: 2px;
   flex-shrink: 0;
