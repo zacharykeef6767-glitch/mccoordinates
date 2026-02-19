@@ -304,6 +304,7 @@ body {
   <div class="tab active" data-tab="coords">📍 Coords</div>
   <div class="tab"        data-tab="add">➕ Add</div>
   <div class="tab"        data-tab="nether">🔥 Nether</div>
+  <div class="tab"        data-tab="profile">👤 Profile</div>
 </div>
 
 <!-- SCROLL AREA -->
@@ -387,6 +388,30 @@ body {
         <div class="field"><label>Z</label><input type="number" id="ne_z" inputmode="numeric" placeholder="0"></div>
       </div>
       <div class="nether-box ow"><div class="result-label">🌍 OVERWORLD COORDS</div><div class="result-val" id="oResult">—</div></div>
+    </div>
+  </div>
+
+  <!-- PROFILE TAB -->
+  <div class="view" id="tab-profile">
+    <div id="profileView-notLoggedIn">
+      <div class="card">
+        <div class="card-title">⚙ ACCOUNT</div>
+        <div class="form-grid">
+          <div class="field full"><label>Username</label><input type="text" id="profileUsername" placeholder="Choose a username..."></div>
+          <div class="field full"><label>Password</label><input type="password" id="profilePassword" placeholder="Create a password..."></div>
+        </div>
+        <button class="btn btn-primary" id="btnSignUp">🆕 SIGN UP</button>
+        <button class="btn btn-secondary" id="btnLogIn">🔓 LOG IN</button>
+      </div>
+    </div>
+    <div id="profileView-loggedIn" class="hidden">
+      <div class="card">
+        <div class="card-title">👤 LOGGED IN</div>
+        <div style="font-family:'VT323',monospace;font-size:18px;color:var(--grass);margin-bottom:14px">Player: <strong id="displayUsername"></strong></div>
+        <button class="btn btn-primary" id="btnSyncProfiles">☁️ SYNC TO CLOUD</button>
+        <button class="btn btn-secondary" id="btnLoadProfiles">⬇️ LOAD FROM CLOUD</button>
+        <button class="btn btn-secondary" id="btnLogOut">🚪 LOG OUT</button>
+      </div>
     </div>
   </div>
 
@@ -736,7 +761,88 @@ function toast(msg) {
   setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 300); }, 2200);
 }
 
+// ── USER PROFILE / ACCOUNT SYSTEM ──────────────────────────────────────────
+let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+const users = new Map(JSON.parse(localStorage.getItem('users') || '[]'));
+
+function updateProfileUI() {
+  const notLoggedIn = document.getElementById('profileView-notLoggedIn');
+  const loggedIn = document.getElementById('profileView-loggedIn');
+  if (currentUser) {
+    notLoggedIn.classList.add('hidden');
+    loggedIn.classList.remove('hidden');
+    document.getElementById('displayUsername').textContent = currentUser.username;
+  } else {
+    notLoggedIn.classList.remove('hidden');
+    loggedIn.classList.add('hidden');
+  }
+}
+
+document.getElementById('btnSignUp').addEventListener('click', () => {
+  const username = document.getElementById('profileUsername').value.trim();
+  const password = document.getElementById('profilePassword').value.trim();
+  if (!username || !password) { toast('❌ Enter username & password!'); return; }
+  if (users.has(username)) { toast('❌ Username taken!'); return; }
+  users.set(username, { password, profiles: [] });
+  localStorage.setItem('users', JSON.stringify([...users]));
+  currentUser = { username, profiles: [], cloudProfiles: [] };
+  localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  updateProfileUI();
+  toast('✅ Account created!');
+  document.getElementById('profileUsername').value = '';
+  document.getElementById('profilePassword').value = '';
+});
+
+document.getElementById('btnLogIn').addEventListener('click', () => {
+  const username = document.getElementById('profileUsername').value.trim();
+  const password = document.getElementById('profilePassword').value.trim();
+  if (!username || !password) { toast('❌ Enter username & password!'); return; }
+  const user = users.get(username);
+  if (!user || user.password !== password) { toast('❌ Invalid credentials!'); return; }
+  currentUser = { username, profiles: user.profiles || [], cloudProfiles: user.cloudProfiles || [] };
+  localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  updateProfileUI();
+  toast('✅ Logged in!');
+  document.getElementById('profileUsername').value = '';
+  document.getElementById('profilePassword').value = '';
+});
+
+document.getElementById('btnLogOut').addEventListener('click', () => {
+  if (currentUser) {
+    const user = users.get(currentUser.username);
+    if (user) {
+      user.profiles = currentUser.profiles;
+      user.cloudProfiles = currentUser.cloudProfiles;
+      users.set(currentUser.username, user);
+      localStorage.setItem('users', JSON.stringify([...users]));
+    }
+  }
+  currentUser = null;
+  localStorage.setItem('currentUser', 'null');
+  updateProfileUI();
+  toast('👋 Logged out!');
+});
+
+document.getElementById('btnSyncProfiles').addEventListener('click', () => {
+  if (!currentUser) { toast('❌ Not logged in!'); return; }
+  currentUser.cloudProfiles = JSON.parse(JSON.stringify(data.profiles));
+  localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  toast('☁️ Synced to cloud!');
+});
+
+document.getElementById('btnLoadProfiles').addEventListener('click', () => {
+  if (!currentUser || !currentUser.cloudProfiles || currentUser.cloudProfiles.length === 0) {
+    toast('❌ No profiles in cloud!'); return;
+  }
+  data.profiles = JSON.parse(JSON.stringify(currentUser.cloudProfiles));
+  persist();
+  renderProfiles();
+  renderCoords();
+  toast('⬇️ Loaded from cloud!');
+});
+
 // ── INIT ─────────────────────────────────────────────────────────────────────
+updateProfileUI();
 renderProfiles();
 renderCoords();
 updateProfileSelect();
