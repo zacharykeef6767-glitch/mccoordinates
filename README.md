@@ -3,7 +3,23 @@
 
 A mobile-first Progressive Web App (PWA) for tracking Minecraft coordinates, organized by world or server. Install it to your phone's home screen and it works completely offline.
 
-### 🚀 [**LAUNCH THE APP**](https://zacharykeef6767-glitch.github.io/)
+### 🚀 Launch the App
+
+**Option 1: Local Development (Works Now)**
+Run locally in the codespace:
+```bash
+cd mc-coord-pwa && python3 -m http.server 8000
+```
+Then open: http://localhost:8000
+
+**Option 2: GitHub Pages (Manual Setup Required)**
+To enable automatic hosting:
+1. Go to your repository **Settings** → **Pages**
+2. Select **Deploy from a branch**
+3. Choose `main` branch and `/root` folder
+4. Click **Save**
+
+App will be available at: https://zacharykeef6767-glitch.github.io/
 
 ---
 
