@@ -3,7 +3,7 @@
 
 A mobile-first Progressive Web App (PWA) for tracking Minecraft coordinates, organized by world or server. Install it to your phone's home screen and it works completely offline.
 
-### 🚀 [**LAUNCH THE APP**](https://zacharykeef6767-glitch.github.io/mccoordinates/)
+### 🚀 [**LAUNCH THE APP**](https://zacharykeef6767-glitch.github.io/)
 
 ---
 
