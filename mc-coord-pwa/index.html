@@ -295,6 +295,7 @@ body {
 <div class="app-header">
   <span class="header-logo">⛏</span>
   <span class="header-title">COORD TRACKER</span>
+  <button class="icon-btn" id="btnFeedback" title="Send Feedback">💬</button>
   <button class="icon-btn" id="btnExport" title="Export JSON">📤</button>
 </div>
 
@@ -711,6 +712,11 @@ function calcO() {
   const x=parseFloat(document.getElementById('ne_x').value), y=parseFloat(document.getElementById('ne_y').value), z=parseFloat(document.getElementById('ne_z').value);
   document.getElementById('oResult').textContent = (!isNaN(x)&&!isNaN(z)) ? `X:${Math.round(x*8)}  Y:${isNaN(y)?64:y}  Z:${Math.round(z*8)}` : '—';
 }
+
+// ── FEEDBACK ────────────────────────────────────────────────────────────────
+document.getElementById('btnFeedback').addEventListener('click', () => {
+  window.open('https://github.com/zacharykeef6767-glitch/mccoordinates/issues', '_blank');
+});
 
 // ── EXPORT ──────────────────────────────────────────────────────────────────
 document.getElementById('btnExport').addEventListener('click', () => {
