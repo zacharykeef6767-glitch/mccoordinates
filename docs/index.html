@@ -296,7 +296,6 @@ body {
 <div class="app-header">
   <span class="header-logo">⛏</span>
   <span class="header-title">COORD TRACKER</span>
-  <button class="icon-btn" id="btnProfile" title="Profile">👤</button>
   <button class="icon-btn" id="btnFeedback" title="Send Feedback">💬</button>
   <button class="icon-btn" id="btnExport" title="Export JSON">📤</button>
 </div>
@@ -306,6 +305,7 @@ body {
   <div class="tab active" data-tab="coords">📍 Coords</div>
   <div class="tab"        data-tab="add">➕ Add</div>
   <div class="tab"        data-tab="nether">🔥 Nether</div>
+  <div class="tab"        data-tab="profile">👤 Profile</div>
 </div>
 
 <!-- SCROLL AREA -->
@@ -752,11 +752,6 @@ document.getElementById('btnExport').addEventListener('click', () => {
   const a    = document.createElement('a');
   a.href = url; a.download = 'mc-coordinates.json'; a.click();
   URL.revokeObjectURL(url); toast('📤 Exported!');
-});
-
-// ── PROFILE BUTTON ──────────────────────────────────────────────────────────
-document.getElementById('btnProfile').addEventListener('click', () => {
-  switchTab('profile');
 });
 
 // ── TOAST ───────────────────────────────────────────────────────────────────
