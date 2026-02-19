@@ -458,7 +458,7 @@ if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalon
   document.getElementById('iosBanner').classList.add('show');
   setTimeout(() => { document.getElementById('iosBanner').classList.remove('show'); localStorage.setItem('iosDismissed','1'); }, 12000);
 }
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
 // ── TABS ───────────────────────────────────────────────────────────────────
 document.querySelectorAll('.tab').forEach(tab =>
