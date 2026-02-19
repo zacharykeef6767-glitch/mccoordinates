@@ -778,68 +778,86 @@ function updateProfileUI() {
   }
 }
 
-document.getElementById('btnSignUp').addEventListener('click', () => {
-  const username = document.getElementById('profileUsername').value.trim();
-  const password = document.getElementById('profilePassword').value.trim();
-  if (!username || !password) { toast('❌ Enter username & password!'); return; }
-  if (users.has(username)) { toast('❌ Username taken!'); return; }
-  users.set(username, { password, profiles: [] });
-  localStorage.setItem('users', JSON.stringify([...users]));
-  currentUser = { username, profiles: [], cloudProfiles: [] };
-  localStorage.setItem('currentUser', JSON.stringify(currentUser));
-  updateProfileUI();
-  toast('✅ Account created!');
-  document.getElementById('profileUsername').value = '';
-  document.getElementById('profilePassword').value = '';
-});
-
-document.getElementById('btnLogIn').addEventListener('click', () => {
-  const username = document.getElementById('profileUsername').value.trim();
-  const password = document.getElementById('profilePassword').value.trim();
-  if (!username || !password) { toast('❌ Enter username & password!'); return; }
-  const user = users.get(username);
-  if (!user || user.password !== password) { toast('❌ Invalid credentials!'); return; }
-  currentUser = { username, profiles: user.profiles || [], cloudProfiles: user.cloudProfiles || [] };
-  localStorage.setItem('currentUser', JSON.stringify(currentUser));
-  updateProfileUI();
-  toast('✅ Logged in!');
-  document.getElementById('profileUsername').value = '';
-  document.getElementById('profilePassword').value = '';
-});
-
-document.getElementById('btnLogOut').addEventListener('click', () => {
-  if (currentUser) {
-    const user = users.get(currentUser.username);
-    if (user) {
-      user.profiles = currentUser.profiles;
-      user.cloudProfiles = currentUser.cloudProfiles;
-      users.set(currentUser.username, user);
+// Attach event listeners with error handling
+setTimeout(() => {
+  const btnSignUp = document.getElementById('btnSignUp');
+  if (btnSignUp) {
+    btnSignUp.addEventListener('click', () => {
+      const username = document.getElementById('profileUsername').value.trim();
+      const password = document.getElementById('profilePassword').value.trim();
+      if (!username || !password) { toast('❌ Enter username & password!'); return; }
+      if (users.has(username)) { toast('❌ Username taken!'); return; }
+      users.set(username, { password, profiles: [] });
       localStorage.setItem('users', JSON.stringify([...users]));
-    }
+      currentUser = { username, profiles: [], cloudProfiles: [] };
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      updateProfileUI();
+      toast('✅ Account created!');
+      document.getElementById('profileUsername').value = '';
+      document.getElementById('profilePassword').value = '';
+    });
   }
-  currentUser = null;
-  localStorage.setItem('currentUser', 'null');
-  updateProfileUI();
-  toast('👋 Logged out!');
-});
 
-document.getElementById('btnSyncProfiles').addEventListener('click', () => {
-  if (!currentUser) { toast('❌ Not logged in!'); return; }
-  currentUser.cloudProfiles = JSON.parse(JSON.stringify(data.profiles));
-  localStorage.setItem('currentUser', JSON.stringify(currentUser));
-  toast('☁️ Synced to cloud!');
-});
-
-document.getElementById('btnLoadProfiles').addEventListener('click', () => {
-  if (!currentUser || !currentUser.cloudProfiles || currentUser.cloudProfiles.length === 0) {
-    toast('❌ No profiles in cloud!'); return;
+  const btnLogIn = document.getElementById('btnLogIn');
+  if (btnLogIn) {
+    btnLogIn.addEventListener('click', () => {
+      const username = document.getElementById('profileUsername').value.trim();
+      const password = document.getElementById('profilePassword').value.trim();
+      if (!username || !password) { toast('❌ Enter username & password!'); return; }
+      const user = users.get(username);
+      if (!user || user.password !== password) { toast('❌ Invalid credentials!'); return; }
+      currentUser = { username, profiles: user.profiles || [], cloudProfiles: user.cloudProfiles || [] };
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      updateProfileUI();
+      toast('✅ Logged in!');
+      document.getElementById('profileUsername').value = '';
+      document.getElementById('profilePassword').value = '';
+    });
   }
-  data.profiles = JSON.parse(JSON.stringify(currentUser.cloudProfiles));
-  persist();
-  renderProfiles();
-  renderCoords();
-  toast('⬇️ Loaded from cloud!');
-});
+
+  const btnLogOut = document.getElementById('btnLogOut');
+  if (btnLogOut) {
+    btnLogOut.addEventListener('click', () => {
+      if (currentUser) {
+        const user = users.get(currentUser.username);
+        if (user) {
+          user.profiles = currentUser.profiles;
+          user.cloudProfiles = currentUser.cloudProfiles;
+          users.set(currentUser.username, user);
+          localStorage.setItem('users', JSON.stringify([...users]));
+        }
+      }
+      currentUser = null;
+      localStorage.setItem('currentUser', 'null');
+      updateProfileUI();
+      toast('👋 Logged out!');
+    });
+  }
+
+  const btnSyncProfiles = document.getElementById('btnSyncProfiles');
+  if (btnSyncProfiles) {
+    btnSyncProfiles.addEventListener('click', () => {
+      if (!currentUser) { toast('❌ Not logged in!'); return; }
+      currentUser.cloudProfiles = JSON.parse(JSON.stringify(data.profiles));
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      toast('☁️ Synced to cloud!');
+    });
+  }
+
+  const btnLoadProfiles = document.getElementById('btnLoadProfiles');
+  if (btnLoadProfiles) {
+    btnLoadProfiles.addEventListener('click', () => {
+      if (!currentUser || !currentUser.cloudProfiles || currentUser.cloudProfiles.length === 0) {
+        toast('❌ No profiles in cloud!'); return;
+      }
+      data.profiles = JSON.parse(JSON.stringify(currentUser.cloudProfiles));
+      persist();
+      renderProfiles();
+      renderCoords();
+      toast('⬇️ Loaded from cloud!');
+    });
+  }
+}, 100);
 
 // ── INIT ─────────────────────────────────────────────────────────────────────
 updateProfileUI();
