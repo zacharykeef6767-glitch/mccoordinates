@@ -10,7 +10,7 @@ Run locally in the codespace:
 ```bash
 cd mc-coord-pwa && python3 -m http.server 8000
 ```
-Then open: http://localhost:8000
+Then open: https://zacharykeef6767-glitch.github.io/mccoordinates/
 if not working then open this, https://mccoordinates.netlify.app/ 
 
 **Option 2: GitHub Pages (Manual Setup Required)**
